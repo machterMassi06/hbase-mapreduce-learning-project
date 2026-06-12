@@ -18,7 +18,7 @@ It may evolve over time as the project grows :)
 ## Clone the repository
 
 ```bash
-git clone <REPO_URL>
+git clone https://github.com/machterMassi06/hbase-mapreduce-learning-project
 cd hbase_mapreduce_project
 ```
 
