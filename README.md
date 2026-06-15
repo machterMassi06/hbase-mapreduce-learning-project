@@ -98,18 +98,39 @@ To generate a JAR for the Java MapReduce code (outside the container), use the f
 
 ```bash
 cd mapreduce
+mvn compile
 mvn package
 ```
 
 This will generate a JAR file such as ~`mapreduce-1.0-SNAPSHOT.jar`, which you can execute with the following command inside the container:
 
 ```bash
-hadoop jar /workspace/mapreduce/target/mapreduce-1.0-SNAPSHOT.jar mapreduce.<Class>
+hadoop jar /workspace/mapreduce/target/mapreduce-1.0-SNAPSHOT.jar mapreduce.<Class> [input] [output]
 ```
+
 
 This command is generic and depends on the class and parameters you pass to it, but it is provided as a general example.
 
+Exemple (inside the container : $/workspace): 
 
+```bash 
+hadoop jar mapreduce/target/mapreduce-1.0-SNAPSHOT.jar \
+main.java.mapreduce.nb_visits_by_country.Driver \
+/data/visits.csv \
+/nb_visits_per_country_output
+```
+
+and the job result in : 
+
+```bash 
+$ hdfs dfs -cat /nb_visits_per_country_output/part-r-00000
+BE      1667
+DZ      1668
+ES      1626
+FR      1619
+UK      1677
+USA     1743
+```
 ---
 
 ## TODO
