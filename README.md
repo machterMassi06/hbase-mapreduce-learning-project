@@ -26,7 +26,11 @@ cd hbase_mapreduce_project
 
 ## Start a ready-to-use Hadoop + HBase pseudo distr cluster 
 
-To avoid setup, you can use [my Docker-based cluster repo](https://github.com/machterMassi06/Hbase-pseudo-distributed) (pseudo-distributed mode) that includes: HDFS,YARN, HBase; and follow its README to build the image.
+To avoid setup, you can use [my Docker-based cluster repo](https://github.com/machterMassi06/Hbase-pseudo-distributed) (pseudo-distributed mode) that includes HDFS,YARN, HBase. You can pull the docker image into your locale machine with the following command : 
+
+```bash 
+ docker pull massmach/hadoop-hbase-cluster:latest
+```
 
 ---
 
@@ -83,6 +87,27 @@ To load the generated csv data into Hdfs, in `/workspace` launch the script:
 ```bash
 ./data/load_to_hdfs.sh 
 ```
+
+---
+
+# 2 - MapReduce
+
+The MapReduce code is written in Java, including loading data into an HBase table using Bulk Load (directly loading HFiles into HBase regions).
+
+To generate a JAR for the Java MapReduce code (outside the container), use the following command:
+
+```bash
+cd mapreduce
+mvn package
+```
+
+This will generate a JAR file such as ~`mapreduce-1.0-SNAPSHOT.jar`, which you can execute with the following command inside the container:
+
+```bash
+hadoop jar /workspace/mapreduce/target/mapreduce-1.0-SNAPSHOT.jar mapreduce.<Class>
+```
+
+This command is generic and depends on the class and parameters you pass to it, but it is provided as a general example.
 
 
 ---
