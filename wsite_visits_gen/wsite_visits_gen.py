@@ -33,7 +33,7 @@ pages = [
 
 start_date = datetime(2025, 1, 1)
 
-with open("visits.csv", "w", newline="") as f:
+with open("data/visits.csv", "w", newline="") as f:
     writer = csv.writer(f)
     writer.writerow(fields)
 

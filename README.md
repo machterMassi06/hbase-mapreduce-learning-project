@@ -76,6 +76,15 @@ cd /workspace
 ./hbase/create_tables.sh $HBASE_HOME
 ```
 
+# 3 - Load generated data to hdfs 
+
+To load the generated csv data into Hdfs, in `/workspace` launch the script:
+
+```bash
+./data/load_to_hdfs.sh 
+```
+
+
 ---
 
 ## TODO
