@@ -128,7 +128,7 @@ The command depends on the driver class and arguments passed to the job.
 Generate HFiles from the CSV dataset and store them in HDFS:
 
 ```bash
-hadoop jar /workspace/mapreduce/mapreduce/target/mapreduce-1.0-SNAPSHOT.jar \
+hadoop jar /workspace/mapreduce/target/mapreduce-1.0-SNAPSHOT.jar \
   main.java.mapreduce.bulk_load.BulkLoadDriver \
   /data/visits.csv \
   /tmp/hfiles
