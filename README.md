@@ -44,7 +44,8 @@ docker run -d \
   -p 8088:8088 \
   -p 16010:16010 \
   -v "$PWD:/workspace" \
-  hadoop-hbase-cluster
+  massmach/hadoop-hbase-cluster:latest
+
 ```
 
 ## Notes
@@ -124,13 +125,15 @@ and the job result in :
 
 ```bash 
 $ hdfs dfs -cat /nb_visits_per_country_output/part-r-00000
+```
+```bash 
 BE      1667
 DZ      1668
 ES      1626
 FR      1619
 UK      1677
 USA     1743
-``
+```
 ---
 
 ## TODO
