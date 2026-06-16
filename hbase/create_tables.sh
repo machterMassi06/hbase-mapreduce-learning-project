@@ -15,6 +15,6 @@ TABLE_PREFIX="web_site"
 
 # Maybe in future: salting & pre-splitting (for real distributed HBase cluster)
 
-COMMAND="create '${TABLE_PREFIX}.visits', {NAME => 'info', COMPRESSION => 'LZ4'}"
+COMMAND="create '${TABLE_PREFIX}.visits', {NAME => 'info'}"
 
 echo -e "$COMMAND" | "$HBASE_HOME/bin/hbase" shell -n
