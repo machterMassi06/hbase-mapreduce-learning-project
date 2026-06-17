@@ -34,20 +34,33 @@ Each visit contains the following fields:
 
 ## Deliverables
 
-1. Create the HBase table.
-2. Justify the RowKey design.
-3. Insert at least 1,000 records.
-4. Verify the data using the HBase Shell.
+1. Create the HBase table (✅ Completed, see [`./hbase/create_tables.sh`](hbase/create_tables.sh) ) 
+2. Justify the RowKey design : ✅ Completed
 
-## Questions
+``` bash
+The current RowKey design is: country#user_id#timestamp
 
-* Why did you choose this RowKey?
-* What are the risks of a poor RowKey design?
-* Why is HBase suitable for this use case?
+Example:
+
+FR#0328#2025-05-21T08:54:58
+
+This design was chosen based on the expected analytical workloads of the project. Most future operations (ETL processes, analytical queries, aggregations, and joins) are expected to be performed primarily at the country level and then at the user level. Placing the country at the beginning of the RowKey allows related records to be grouped together and scanned efficiently.
+
+The user_id component enables user-centric analysis, while the timestamp guarantees uniqueness and preserves chronological ordering.
+
+In addition, the table was pre-split according to the six countries present in the dataset. Although the current environment runs in pseudo-distributed mode with a single RegionServer, this design anticipates future deployment on a larger cluster.
+
+The RowKey design may evolve in future phases if new requirements emerge.
+``` 
+3. Insert at least 10000 records (✅ Completed, Data loading was performed using HBase Bulk Loading, which is the recommended approach for importing large datasets. Instead of inserting records individually through the HBase API, a MapReduce job was used to generate HFiles, which were then loaded directly into HBase regions. Source code: [`.mapreduce/src/main/java/mapreduce/bulk_load`](./mapreduce/src/main/java/mapreduce/bulk_load ) )
+4. Verify the data using the HBase Shell (✅ Completed, The verification confirmed that all records were correctly loaded and accessible from the HBase table)
+
 
 ---
 
-# Phase 2 – First MapReduce Job
+# Phase 2 – First MapReduce Job 
+
+> ✅ Completed , code src in : ./mapreduce/src/main/java/mapreduce/nb_visits_by_country_TableMR
 
 ## New Requirement
 
@@ -242,19 +255,6 @@ CSV Dataset
 |   HBase   |
 +-----------+
 ```
-
----
-
-# Evaluation Criteria
-
-| Criterion                | Weight |
-| ------------------------ | ------ |
-| HBase Data Modeling      | 20%    |
-| Data Loading             | 10%    |
-| MapReduce Implementation | 30%    |
-| Result Quality           | 15%    |
-| Performance Analysis     | 15%    |
-| Final Presentation       | 10%    |
 
 ---
 
