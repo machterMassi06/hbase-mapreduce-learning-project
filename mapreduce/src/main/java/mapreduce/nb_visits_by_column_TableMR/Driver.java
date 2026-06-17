@@ -20,21 +20,43 @@ import org.apache.hadoop.hbase.util.Bytes;
 public class Driver {
     public static void main(String[] args) throws Exception {
 
+        if (args.length != 2) {
+            System.err.println(
+                "Usage: Driver <aggregate_column> <output_path>"
+            );
+            System.exit(1);
+        }
+
         Configuration conf = HBaseConfiguration.create();
 
-        conf.set("aggregate.column", args[0]); // aggregate.column value in [country, user_id, page]
+        String aggregateColumn = args[0]; // nb visits by aggregateColumn 
+
+        if (!aggregateColumn.equals("country")
+                && !aggregateColumn.equals("user_id")
+                && !aggregateColumn.equals("page")) {
+
+            System.err.println(
+                "aggregate.column must be one of: country, user_id, page"
+            );
+
+            System.exit(1);
+        }
+
+        conf.set("aggregate.column", aggregateColumn);
+
         
-        Job job = Job.getInstance(conf, "Visits by country ");
+        Job job = Job.getInstance(conf, "Visits by " + aggregateColumn);
 
         job.setJarByClass(Driver.class);
 
         // Create a Scan object used to read data from the HBase table
         Scan scan = new Scan();
 
-        // Only retrieve the "country" column from the "info" column family.
+        // Only retrieve the requested column qualifier
+        // (country or user_id or page, etc.) from the "info" column family.
         scan.addColumn(
                 Bytes.toBytes("info"), // CF
-                Bytes.toBytes("country") // CQ 
+                Bytes.toBytes(aggregateColumn) // CQ 
         );
 
         // Number of rows fetched per RPC call.
