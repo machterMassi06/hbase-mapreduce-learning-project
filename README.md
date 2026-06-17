@@ -305,7 +305,7 @@ This confirms that the Table MapReduce implementation correctly reads data direc
 
 If the Table MapReduce job was executed without an HDFS output path, the results are written directly into an HBase statistics table.
 
-Open the HBase shell with `hbase shell`, then scan the table with `scan 'web_site.stats_country'
+Open the HBase shell with `hbase shell`, then scan the table with `scan 'web_site.stats_country'`
 
 
 Example output:
