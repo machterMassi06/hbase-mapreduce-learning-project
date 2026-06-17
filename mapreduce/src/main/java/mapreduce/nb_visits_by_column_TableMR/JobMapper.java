@@ -1,4 +1,4 @@
-package main.java.mapreduce.nb_visits_by_country_TableMR;
+package main.java.mapreduce.nb_visits_by_column_TableMR;
 
 import java.io.IOException;
 
@@ -15,10 +15,18 @@ import org.apache.hadoop.io.Text;
 public class JobMapper extends TableMapper<Text,IntWritable> {
 
     public static final byte[] CF = "info".getBytes();
-    public static final byte[] CQ = "country".getBytes();
+    public  byte[] CQ;
 
     private final IntWritable ONE = new IntWritable(1);
     private Text text = new Text();
+
+    @Override
+    protected void setup(Context context) throws IOException, InterruptedException {
+
+        String Cqualifier = context.getConfiguration().get("aggregate.column");
+
+        CQ = Bytes.toBytes(Cqualifier);
+    }
     
     public void map(ImmutableBytesWritable row, Result value, Context context)
             throws IOException, InterruptedException {

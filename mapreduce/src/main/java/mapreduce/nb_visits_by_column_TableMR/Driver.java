@@ -1,5 +1,4 @@
-package main.java.mapreduce.nb_visits_by_country_TableMR;
-
+package main.java.mapreduce.nb_visits_by_column_TableMR;
 import org.apache.hadoop.conf.Configuration;
 
 import org.apache.hadoop.fs.Path;
@@ -22,6 +21,8 @@ public class Driver {
     public static void main(String[] args) throws Exception {
 
         Configuration conf = HBaseConfiguration.create();
+
+        conf.set("aggregate.column", args[0]); // aggregate.column value in [country, user_id, page]
         
         Job job = Job.getInstance(conf, "Visits by country ");
 
@@ -60,7 +61,7 @@ public class Driver {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
 
-        FileOutputFormat.setOutputPath(job,new Path(args[0]));
+        FileOutputFormat.setOutputPath(job,new Path(args[1]));
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
