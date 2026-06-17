@@ -60,7 +60,12 @@ The RowKey design may evolve in future phases if new requirements emerge.
 
 # Phase 2 – First MapReduce Job 
 
-> ✅ Completed , code src in : ./mapreduce/src/main/java/mapreduce/nb_visits_by_country_TableMR
+In 2 differents approch (Classic & Table mapred) :
+
+> ✅ Completed , code src in : ./mapreduce/src/main/java/mapreduce/nb_visits_by_column_TableMR
+
+> ✅ Completed , code src in : ./mapreduce/src/main/java/mapreduce/nb_visits_by_country
+
 
 ## New Requirement
 
@@ -91,6 +96,9 @@ Develop a MapReduce job that reads data directly from HBase and computes:
 ---
 
 # Phase 3 – Client Feedback
+
+> ✅ Completed , code src in : ./mapreduce/src/main/java/mapreduce/nb_visits_by_column_TableMR
+
 
 ## New Requirement
 
