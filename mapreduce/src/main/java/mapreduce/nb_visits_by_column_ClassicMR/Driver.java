@@ -1,6 +1,5 @@
 package main.java.mapreduce.nb_visits_by_column_ClassicMR;
 
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -9,9 +8,6 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-
-import main.java.mapreduce.nb_visits_by_column_TableMR.JobMapper;
-import main.java.mapreduce.nb_visits_by_column_TableMR.JobReducer;
 
 public class Driver {
     public static void main(String[] args) throws Exception {

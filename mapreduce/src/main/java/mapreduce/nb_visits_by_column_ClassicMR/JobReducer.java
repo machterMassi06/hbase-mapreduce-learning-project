@@ -1,4 +1,4 @@
-package main.java.mapreduce.nb_visits_by_country;
+package main.java.mapreduce.nb_visits_by_column_ClassicMR;
 
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
