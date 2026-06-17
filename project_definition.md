@@ -128,6 +128,8 @@ Generate a Top-10 Most Active Users report.
 
 # Phase 4 – Industrialization of TableMR to persiste data in Hbase tables 
 
+> ✅ Completed , code src in : ./mapreduce/src/main/java/mapreduce/nb_visits_by_column_TableMR
+
 ## New Requirement
 
 The company wants to persist analytical results.
@@ -157,41 +159,75 @@ stats:visit_count = 1619
 * Verification of stored statistics.
 ---
 
-# Phase 5 – Advanced Analytics
+# Phase 5 – Data Enrichment Through Table Join
 
 ## New Requirement
 
-The marketing department asks:
+The marketing department wants to enrich website visit records with user information in order to enable more advanced analytics.
 
-> Which pages are the most visited in each country?
+First : generate data & create a new HBase table containing user profiles. 
 
-### Example
-
-```text
-FR -> /home -> 5400
-FR -> /products -> 2100
-
-US -> /home -> 1200
-US -> /pricing -> 950
-```
+---
 
 ## Objective
 
-Design a MapReduce job capable of producing these statistics.
-
-### Hint
-
-A composite intermediate key may be useful:
+Perform a MapReduce join between:
 
 ```text
-(country, page)
+web_site.visits
+web_site.users
 ```
 
-## Deliverables
+and create a new enriched HBase table:
 
-* Mapper design.
-* Reducer design.
-* Final statistics.
+```text
+web_site.visits_enriched
+```
+
+### new source table : web_site.users
+
+```text 
+RowKey=user_id: 0328
+
+info:first_name = Alice
+info:last_name = Martin
+info:age = 28
+info:gender = F
+info:segment = Premium
+```
+
+---
+
+## Expected Output
+
+### web_site.visits_enriched
+
+```text 
+RowKey: FR#0328#2025-05-21T08:54:58
+```
+
+```text
+visit:user_id = 0328
+visit:page = /home
+visit:country = FR
+visit:timestamp = 2025-05-21T08:54:58
+
+user:first_name = Alice
+user:last_name = Martin
+user:age = 28
+user:gender = F
+user:segment = Premium
+```
+
+---
+
+## Join Key
+
+The join must be performed using:
+
+```text
+user_id
+```
 
 ---
 
@@ -203,13 +239,13 @@ As the volume of data grows, execution times become longer.
 
 ## Objective
 
-Write a short analytical report discussing:
+Write a short analytical report / or Benchmark discussing:
 
 ### Advantages of MapReduce
 
-* Scalability
-* Fault tolerance
+* Scalability Hbase
 * Distributed processing
+* Bulk Load vs row by row PUTs vs Connector Spark
 
 ### Limitations of MapReduce
 
@@ -220,61 +256,3 @@ Write a short analytical report discussing:
 ### Comparison with Modern Frameworks
 
 * Apache Spark
-* Apache Flink
-
----
-
-# Phase 7 – Final Presentation
-
-Prepare a final presentation and be ready to answer the following questions.
-
-## Oral Examination Questions
-
-1. Why did you choose HBase?
-2. Why is RowKey design important?
-3. How does HBase distribute data across RegionServers?
-4. What is the difference between HDFS and HBase?
-5. Why use MapReduce on top of HBase?
-6. What happens when a RegionServer fails?
-7. Why is Apache Spark generally faster than MapReduce?
-8. Which analytics could be performed in real time using Flink?
-
----
-
-# Expected Architecture
-
-```text
-CSV Dataset
-     |
-     v
-+-----------+
-|   HBase   |
-+-----------+
-     |
-     v
-+-----------+
-| MapReduce |
-+-----------+
-     |
-     v
-+-----------+
-| Statistics|
-|   HBase   |
-+-----------+
-```
-
----
-
-# Project Goal
-
-The purpose of this project is to demonstrate practical knowledge of:
-
-* Hadoop Ecosystem
-* HDFS
-* HBase
-* MapReduce Programming
-* Distributed Data Processing
-* Big Data System Design
-* Performance Evaluation
-
-By the end of the project, students should be able to design, implement, and evaluate a complete analytical pipeline using HBase and MapReduce.
