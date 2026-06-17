@@ -172,9 +172,12 @@ Current count: 10000, row: USA#0500#2025-04-10T17:51:26
 
 
 ### 2. Compute the Number of Visits per Country
-> code src in : mapreduce/src/main/java/mapreduce/nb_visits_by_country 
+> With classic MapReduce, code src in : mapreduce/src/main/java/mapreduce/nb_visits_by_country
 
-Run the MapReduce job:
+> With  Table MapReduce, code src in : mapreduce/src/main/java/mapreduce/nb_visits_by_country_TableMR
+
+
+Run the classic MapReduce job:
 
 ```bash
 hadoop jar /workspace/mapreduce/target/mapreduce-1.0-SNAPSHOT.jar \
@@ -183,13 +186,26 @@ hadoop jar /workspace/mapreduce/target/mapreduce-1.0-SNAPSHOT.jar \
   /nb_visits_per_country_output
 ```
 
-Display the generated results:
+Run the Table MapReduce job, which reads data directly from the HBase table `web_site.visits`:
+
+```bash
+hadoop jar mapreduce/target/mapreduce-1.0-SNAPSHOT.jar \
+ main.java.mapreduce.nb_visits_by_country_TableMR.Driver \
+ /nb_visits_per_country_TableMR_output 
+```
+Display the generated results (classic Mapreduce):
 
 ```bash
 hdfs dfs -cat /nb_visits_per_country_output/part-r-00000
 ```
 
-Output:
+Display the generated results (Table Mapreduce):
+
+```bash
+hdfs dfs -cat /nb_visits_per_country_TableMR_output/part-r-00000
+```
+
+You should get the same result:
 
 ```text
 BE      1667
@@ -200,7 +216,7 @@ UK      1677
 USA     1743
 ```
 
-The output contains the total number of visits recorded for each country in the dataset.
+This results contains the total number of visits recorded for each country in the dataset.
 
 ---
 # TODO
