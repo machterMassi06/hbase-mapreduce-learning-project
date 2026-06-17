@@ -126,7 +126,7 @@ Generate a Top-10 Most Active Users report.
 
 ---
 
-# Phase 4 – Industrialization
+# Phase 4 – Industrialization of TableMR to persiste data in Hbase tables 
 
 ## New Requirement
 
@@ -137,25 +137,24 @@ The company wants to persist analytical results.
 Create a new HBase table:
 
 ```text
-stats_users
+stats_users, stats_country, stat_pages 
 ```
 
 Store the output of the MapReduce job directly in HBase.
 
-### Example
+### Example (stats_country)
 
 ```text
-RowKey: U001
+RowKey: FR
 
-stats:visit_count = 128
+stats:visit_count = 1619 
 ```
 
 ## Deliverables
 
-* Table creation script.
+* Table creation in java.
 * MapReduce integration with HBase output.
 * Verification of stored statistics.
-
 ---
 
 # Phase 5 – Advanced Analytics

@@ -78,7 +78,7 @@ cd /workspace
 2. Launch the script:
 
 ```bash
-./hbase/create_tables.sh $HBASE_HOME
+./hbase/create_tables.sh
 ```
 
 ---
@@ -184,7 +184,7 @@ country OR user_id OR page
 Run the classic MapReduce job:
 ```bash
 hadoop jar /workspace/mapreduce/target/mapreduce-1.0-SNAPSHOT.jar \
-  main.java.mapreduce.nb_visits_by_column_TableMR.Driver \
+  main.java.mapreduce.nb_visits_by_column_ClassicMR.Driver \
   /data/visits.csv \
   <columnX> \
   /nb_visits_per_<columnX>_ClassicMR_output
