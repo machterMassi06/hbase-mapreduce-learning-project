@@ -1,8 +1,11 @@
 package main.java.mapreduce.visits_users_join;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.naming.Context;
 
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
@@ -16,6 +19,9 @@ public class JoinMapper extends TableMapper<ImmutableBytesWritable, Put> {
     private static final byte[] VISIT_CF = Bytes.toBytes("info");
     private static final byte[] USER_CF = Bytes.toBytes("info");
 
+    private static final byte[] VISIT_ENR_CF = Bytes.toBytes("visit");
+    private static final byte[] USER_ENR_CF = Bytes.toBytes("user");
+    
     private Map<String, UserProfile> users = new HashMap<>();
 
     private Connection connection;
@@ -69,16 +75,16 @@ public class JoinMapper extends TableMapper<ImmutableBytesWritable, Put> {
 
         //RESULT JOIN IN visits_enriched
         // VISIT
-        put.addColumn(VISIT_CF, Bytes.toBytes("user_id"),Bytes.toBytes(userId));
-        put.addColumn(VISIT_CF, Bytes.toBytes("page"),value.getValue(VISIT_CF, Bytes.toBytes("page")));
-        put.addColumn(VISIT_CF, Bytes.toBytes("country"),value.getValue(VISIT_CF, Bytes.toBytes("country")));
-        put.addColumn(VISIT_CF, Bytes.toBytes("timestamp"),value.getValue(VISIT_CF, Bytes.toBytes("timestamp")));
+        put.addColumn(VISIT_ENR_CF, Bytes.toBytes("user_id"),Bytes.toBytes(userId));
+        put.addColumn(VISIT_ENR_CF, Bytes.toBytes("page"),value.getValue(VISIT_CF, Bytes.toBytes("page")));
+        put.addColumn(VISIT_ENR_CF, Bytes.toBytes("country"),value.getValue(VISIT_CF, Bytes.toBytes("country")));
+        put.addColumn(VISIT_ENR_CF, Bytes.toBytes("timestamp"),value.getValue(VISIT_CF, Bytes.toBytes("timestamp")));
 
         // USER (ENRICHMENT)
-        put.addColumn(USER_CF, Bytes.toBytes("first_name"), user.firstName);
-        put.addColumn(USER_CF, Bytes.toBytes("last_name"), user.lastName);
-        put.addColumn(USER_CF, Bytes.toBytes("age"), user.age);
-        put.addColumn(USER_CF, Bytes.toBytes("gender"), user.gender);
+        put.addColumn(USER_ENR_CF, Bytes.toBytes("first_name"), user.firstName);
+        put.addColumn(USER_ENR_CF, Bytes.toBytes("last_name"), user.lastName);
+        put.addColumn(USER_ENR_CF, Bytes.toBytes("age"), user.age);
+        put.addColumn(USER_ENR_CF, Bytes.toBytes("gender"), user.gender);
 
         context.write(row, put);
     }

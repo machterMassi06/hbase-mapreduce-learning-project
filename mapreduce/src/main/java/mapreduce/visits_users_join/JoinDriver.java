@@ -4,6 +4,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;
+import org.apache.hadoop.hbase.mapreduce.TableOutputFormat;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.fs.Path;
@@ -49,6 +50,12 @@ public class JoinDriver {
         // 'dummy dir' REQUIRED by Hadoop even if output goes to HBase
         FileOutputFormat.setOutputPath(job, new Path(args[0]));
 
+        // HBase output
+        job.setOutputFormatClass(TableOutputFormat.class);
+        job.getConfiguration().set(
+                TableOutputFormat.OUTPUT_TABLE,
+                "web_site.visits_enriched"
+        );
         job.setNumReduceTasks(0);
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
