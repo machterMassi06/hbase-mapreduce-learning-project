@@ -371,13 +371,78 @@ Bytes.toBytes(int)
 
 Therefore, HBase displays the raw byte representation of the stored integers. Any application reading the data can deserialize these byte values into integer values to facilitate analysis, reporting, and debugging.
 
+### 4. HBase Tables Join with a MapReduce Job
+
+> In this part, a MapReduce job performs a join between two HBase tables: `web_site.visits` and `web_site.users`.
+>
+> The join is performed using a single Map phase (no Reducer is required; see the justification in Phase 5 of [./project_definition.md](./project_definition.md)).
+>
+> Since the `web_site.users` table is very small (500 rows), it is loaded once into memory during the mapper setup phase. Each mapper then enriches visit records by looking up the corresponding user information locally.
+>
+> The join result is stored in a new HBase table named `web_site.visits_enriched` (containing two column families: `visit` and `user`). This table is automatically created by `JoinDriver` if it does not already exist.
+>
+> Source code:
+>
+> ```text
+> mapreduce/src/main/java/mapreduce/visits_users_join
+> ```
+
+#### Run the join MapReduce job
+
+The join result is written directly into the HBase table `web_site.visits_enriched`.
+
+```bash
+hadoop jar /workspace/mapreduce/target/mapreduce-1.0-SNAPSHOT.jar \
+    main.java.mapreduce.visits_users_join.JoinDriver
+```
+
+#### Verify the result
+
+Open the HBase shell with `hbase shell`.
+
+You can inspect the joined table with:
+
+```ruby
+count 'web_site.visits_enriched'
+```
+
+Result:
+
+```text
+10000 row(s)
+```
+
+For example, the following command retrieves one row from the enriched table:
+
+```ruby
+get 'web_site.visits_enriched', 'ES#0189#2025-04-03T14:00:37'
+```
+
+returns:
+
+```text
+COLUMN                                  CELL
+ user:age                               timestamp=2026-06-18T13:07:26.932, value=34
+ user:first_name                        timestamp=2026-06-18T13:07:26.932, value=Caroline
+ user:gender                            timestamp=2026-06-18T13:07:26.932, value=F
+ user:last_name                         timestamp=2026-06-18T13:07:26.932, value=Lucas
+ visit:country                          timestamp=2026-06-18T13:07:26.932, value=ES
+ visit:page                             timestamp=2026-06-18T13:07:26.932, value=/home
+ visit:timestamp                        timestamp=2026-06-18T13:07:26.932, value=2025-04-03T14:00:37
+ visit:user_id                          timestamp=2026-06-18T13:07:26.932, value=0189
+
+1 row(s)
+Took 0.1679 seconds
+```
+
+This outputs confirms that the join was successfully performed: the original visit information is preserved in the `visit` column family, while the corresponding user attributes have been added to the `user` column family.
 
 ---
+
 # TODO
-* Run MapReduce jobs from hbase tables (join-phase 5)
-* Benchmark perf
 
-
+- Benchmark and analyze the performances.
+- Explore alternative HBase table join strategies as described in **Future Work – Phase 5** of [./project_definition.md](./project_definition.md).
 
 
 

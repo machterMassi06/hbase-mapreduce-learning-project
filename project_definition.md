@@ -157,9 +157,32 @@ stats:visit_count = 1619
 * Table creation in java.
 * MapReduce integration with HBase output.
 * Verification of stored statistics.
----
 
+---
 # Phase 5 – Data Enrichment Through Table Join
+
+> ✅ Completed  
+> Source code: `./mapreduce/src/main/java/mapreduce/visits_users_join`
+>
+> **Join strategy:** Map-side join.
+>
+> The join is implemented entirely in the Map phase:
+>
+> - `web_site.visits` is the largest HBase table and is therefore scanned row by row by the mappers.
+> - `web_site.users` is very small (500 rows), so it is loaded only once during the mapper setup phase and stored in memory as a `HashMap<user_id, UserProfile>`.
+> - Each mapper enriches visit records by performing an in-memory lookup of the corresponding user profile.
+>
+> This approach avoids the shuffle and reduce phases, making it efficient when one of the joined datasets is small enough to fit in memory.
+>
+> **Future work**
+>
+> Explore alternative join strategies suitable for larger datasets, including:
+>
+> - Reduce-side joins (MapReduce joins)
+> - Partition-based joins
+> - Repartition joins
+> - Broadcast joins
+> - Other distributed join optimization techniques
 
 ## New Requirement
 

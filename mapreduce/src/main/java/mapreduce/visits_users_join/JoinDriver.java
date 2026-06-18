@@ -47,15 +47,13 @@ public class JoinDriver {
                 job
         );
 
-        // 'dummy dir' REQUIRED by Hadoop even if output goes to HBase
-        FileOutputFormat.setOutputPath(job, new Path(args[0]));
-
         // HBase output
         job.setOutputFormatClass(TableOutputFormat.class);
         job.getConfiguration().set(
                 TableOutputFormat.OUTPUT_TABLE,
                 "web_site.visits_enriched"
         );
+        
         job.setNumReduceTasks(0);
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
