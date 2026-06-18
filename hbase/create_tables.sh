@@ -15,3 +15,8 @@ create '${TABLE_PREFIX}.stats_page', {NAME => 'stats'}
 "
 
 echo -e "$COMMAND2" | "$HBASE_HOME/bin/hbase" shell -n
+
+# Users table 
+
+COMMAND3="create '${TABLE_PREFIX}.users', {NAME => 'info'}"
+echo -e "$COMMAND3" | "$HBASE_HOME/bin/hbase" shell -n

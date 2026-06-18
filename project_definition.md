@@ -193,7 +193,6 @@ info:first_name = Alice
 info:last_name = Martin
 info:age = 28
 info:gender = F
-info:segment = Premium
 ```
 
 ---
@@ -216,7 +215,6 @@ user:first_name = Alice
 user:last_name = Martin
 user:age = 28
 user:gender = F
-user:segment = Premium
 ```
 
 ---

@@ -3,4 +3,4 @@
 hdfs dfs -mkdir -p /data
 
 hdfs dfs -put data/visits.csv /data/
-
+hdfs dfs -put data/users.csv /data/
