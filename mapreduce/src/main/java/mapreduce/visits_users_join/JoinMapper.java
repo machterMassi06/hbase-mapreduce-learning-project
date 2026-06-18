@@ -1,11 +1,9 @@
 package main.java.mapreduce.visits_users_join;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.naming.Context;
 
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
