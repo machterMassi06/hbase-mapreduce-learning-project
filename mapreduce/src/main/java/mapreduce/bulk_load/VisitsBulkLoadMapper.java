@@ -13,7 +13,7 @@ import org.apache.hadoop.io.Text;
 
 import org.apache.hadoop.mapreduce.Mapper;
 
-public class BulkLoadMapper extends
+public class VisitsBulkLoadMapper extends
         Mapper<LongWritable, Text, ImmutableBytesWritable, KeyValue> {
     
     private static final byte[] CF = Bytes.toBytes("info"); // the single column family of the table 

@@ -24,29 +24,53 @@ public class BulkLoadDriver {
     
     public static void main(String[] args) throws Exception{
 
+        if (args.length != 3) {
+            System.err.println(
+                "Usage: BulkLoadDriver <input> <output> <HbaseTable>"
+            );
+            System.exit(1);
+        }
+
+        String inputPath = args[0];
+        String outputPath = args[1];
+        String tableName = args[2];
+
         Configuration conf = HBaseConfiguration.create();
         
-        Job job = Job.getInstance(conf, "Bulk load visits from hdfs");
+        Job job = Job.getInstance(conf, "Bulk load into "+ tableName);
 
         job.setJarByClass(BulkLoadDriver.class);
 
-        job.setMapperClass(BulkLoadMapper.class);
+        // switch Mapper class (supported tables : visits & users)
+        switch (tableName) {
+
+            case "web_site.visits":
+                job.setMapperClass(VisitsBulkLoadMapper.class);
+                break;
+
+            case "web_site.users":
+                job.setMapperClass(UsersBulkLoadMapper.class);
+                break;
+
+            default:
+                throw new IllegalArgumentException(
+                    "Unknown table : " + tableName
+                );
+        }
 
         job.setMapOutputKeyClass(ImmutableBytesWritable.class);
 
         job.setMapOutputValueClass(KeyValue.class);
 
-        FileInputFormat.addInputPath(job,new Path(args[0]));
+        FileInputFormat.addInputPath(job,new Path(inputPath));
 
-        Path outputPath = new Path(args[1]);
-
-        HFileOutputFormat2.setOutputPath(job, outputPath);
+        HFileOutputFormat2.setOutputPath(job, new Path(outputPath));
 
         Connection connection = ConnectionFactory.createConnection(conf);
 
-        Table table = connection.getTable(TableName.valueOf("web_site.visits"));
+        Table table = connection.getTable(TableName.valueOf(tableName));
 
-        RegionLocator locator = connection.getRegionLocator(TableName.valueOf("web_site.visits"));
+        RegionLocator locator = connection.getRegionLocator(TableName.valueOf(tableName));
 
         HFileOutputFormat2.configureIncrementalLoad(job, table,locator);
 

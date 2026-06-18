@@ -101,8 +101,7 @@ To build the Java MapReduce project and generate the JAR file (inside the contai
 
 ```bash
 cd /workspace/mapreduce
-mvn compile
-mvn package
+mvn clean package # OR : mvn compile && mvn package
 ```
 
 This generates a JAR file (in mapreduce/target/) similar to:
@@ -123,27 +122,74 @@ The command depends on the driver class and arguments passed to the job.
 ## Examples
 
 ### 1. Bulk Load data into HBase
-> code src in : mapreduce/src/main/java/mapreduce/bulk_load
 
-Generate HFiles from the CSV dataset and store them in HDFS:
+> Source code: `mapreduce/src/main/java/mapreduce/bulk_load`
+
+#### 1.1 - Generate HFiles from a CSV dataset and store them in HDFS
+
+Run the generic bulk load driver by providing:
+
+- the input CSV file in HDFS
+- the output HFiles directory in HDFS
+- the target HBase table
+
+```bash
+hadoop jar /workspace/mapreduce/target/mapreduce-1.0-SNAPSHOT.jar \
+  main.java.mapreduce.bulk_load.BulkLoadDriver \
+  <input_csv> \
+  <unique_hfiles_output_dir> \
+  <hbase_table>
+```
+
+Example for the visits table:
 
 ```bash
 hadoop jar /workspace/mapreduce/target/mapreduce-1.0-SNAPSHOT.jar \
   main.java.mapreduce.bulk_load.BulkLoadDriver \
   /data/visits.csv \
-  /tmp/hfiles
+  /tmp/hfiles_visits \
+  web_site.visits
 ```
 
-Load the generated HFiles into the HBase table:
+Example for the users table:
+
+```bash
+hadoop jar /workspace/mapreduce/target/mapreduce-1.0-SNAPSHOT.jar \
+  main.java.mapreduce.bulk_load.BulkLoadDriver \
+  /data/users.csv \
+  /tmp/hfiles_users \
+  web_site.users
+```
+
+#### 1.2 - Load generated HFiles into HBase
 
 ```bash
 HADOOP_CLASSPATH="$HBASE_HOME/lib/shaded-clients/hbase-shaded-mapreduce-2.5.8.jar" \
 hbase org.apache.hadoop.hbase.mapreduce.LoadIncrementalHFiles \
-  /tmp/hfiles \
+  <hfiles_output_dir> \
+  <hbase_table>
+```
+
+Example for the visits table:
+
+```bash
+HADOOP_CLASSPATH="$HBASE_HOME/lib/shaded-clients/hbase-shaded-mapreduce-2.5.8.jar" \
+hbase org.apache.hadoop.hbase.mapreduce.LoadIncrementalHFiles \
+  /tmp/hfiles_visits \
   web_site.visits
 ```
 
-Verify that the data has been loaded successfully:
+Example for the users table:
+
+```bash
+HADOOP_CLASSPATH="$HBASE_HOME/lib/shaded-clients/hbase-shaded-mapreduce-2.5.8.jar" \
+hbase org.apache.hadoop.hbase.mapreduce.LoadIncrementalHFiles \
+  /tmp/hfiles_users \
+  web_site.users
+```
+
+#### 1.3 - Verify that the data has been loaded successfully
+Example for `web_site.visits` table :
 
 ```bash
 hbase shell
