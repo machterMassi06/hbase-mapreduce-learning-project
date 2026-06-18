@@ -19,7 +19,7 @@ It may evolve over time as the project grows :)
 
 ```bash
 git clone https://github.com/machterMassi06/hbase-mapreduce-learning-project
-cd hbase_mapreduce_project
+cd hbase-mapreduce-learning-project
 ```
 
 ---
