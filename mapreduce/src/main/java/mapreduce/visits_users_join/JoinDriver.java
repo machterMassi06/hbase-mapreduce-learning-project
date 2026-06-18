@@ -5,6 +5,8 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;
 import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.fs.Path;
 
 import main.java.mapreduce.hbase_table_utils.HBaseTableUtils;
 
@@ -43,6 +45,9 @@ public class JoinDriver {
                 null,
                 job
         );
+
+        // 'dummy dir' REQUIRED by Hadoop even if output goes to HBase
+        FileOutputFormat.setOutputPath(job, new Path(args[0]));
 
         job.setNumReduceTasks(0);
 
