@@ -68,11 +68,11 @@ grafana
 
 ## Notes
 
-* The current project directory is mounted inside the hadoop-hbase-cluster` container at **/workspace**
+* The current project directory is mounted inside the `hadoop-hbase-cluster` container at **/workspace**
 
 - This allows you to access, edit, and execute the project code directly from within the container without rebuilding the image.
 - Hadoop, HBase, and monitoring services are automatically started when the container launches.
-- Prometheus and Grafana are available immediately after deployment for metrics collection and visualization (see **Monitoring section** in : https://github.com/machterMassi06/Hbase-pseudo-distributed/README.md)
+- Prometheus and Grafana are available immediately after deployment for metrics collection and visualization (see **Monitoring section** in : [https://github.com/machterMassi06/Hbase-pseudo-distributed/README.md](https://github.com/machterMassi06/Hbase-pseudo-distributed/blob/main/README.md))
 
 
 # 2 - Create Tables
