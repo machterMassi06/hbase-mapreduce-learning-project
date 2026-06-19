@@ -297,7 +297,7 @@ Max latency
 99th percentile latency
 ...
 ```
----
+
 
 ## Advantages and Limitations of YCSB 
 
@@ -309,4 +309,40 @@ Max latency
 | Detailed latency statistics       | —                                              |
 | Easy comparison between databases | —                                              |
 
+---
 
+# 3. Monitoring During Benchmark Execution
+
+Benchmark results should always be correlated with cluster metrics.
+
+
+## 3.1 JMX Metrics
+
+HBase exposes internal metrics through **Java Management Extensions (JMX)**.
+
+Useful metrics include:Heap usage, Garbage collection activity, RPC statistics, RegionServer metrics, Block cache metrics...
+
+## 3.2 Prometheus
+
+Prometheus can **collect** HBase metrics through **JMX** exporters.
+
+
+## 3.3 Grafana
+
+Grafana is commonly used alongside Prometheus.
+
+Typical dashboards include: Read throughput; Write throughput; Latency evolution ; CPU utilization ; JVM memory ; Region distribution ...
+
+
+---
+
+# Summary of Tool Stack
+
+| Purpose | Tool |
+|----------|----------|
+| Basic benchmarking | PerformanceEvaluation |
+| Advanced benchmarking | YCSB |
+| JVM monitoring | JMX |
+| Metrics collection | Prometheus |
+| Visualization | Grafana |
+| Troubleshooting | HBase logs via `$HBASE_HOME/logs` |
