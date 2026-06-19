@@ -446,7 +446,6 @@ See [this document](./hbase_bench_and_perf_eval.md), which summarizes the main a
 ---
 # TODO
 
-- Benchmark and analyze the performances.
 - Explore alternative HBase table join strategies as described in **Future Work – Phase 5** of [./project_definition.md](./project_definition.md).
 
 
