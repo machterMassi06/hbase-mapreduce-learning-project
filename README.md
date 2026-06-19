@@ -24,48 +24,64 @@ cd hbase-mapreduce-learning-project
 
 ---
 
-## Start a ready-to-use Hadoop + HBase pseudo distr cluster 
+## Start a Ready-to-Use Hadoop + HBase Pseudo-Distributed Cluster
 
-To avoid setup, you can use [my Docker-based cluster repo](https://github.com/machterMassi06/Hbase-pseudo-distributed) (pseudo-distributed mode) that includes HDFS,YARN, HBase. You can pull the docker image into your locale machine with the following command : 
+To avoid manually installing and configuring Hadoop and HBase, we will use [**my Docker-based cluster project**](https://github.com/machterMassi06/Hbase-pseudo-distributed). The cluster runs in pseudo-distributed mode and provides a complete Hadoop-HBase environment :
 
-```bash 
- docker pull massmach/hadoop-hbase-cluster:latest
-```
+### Hadoop hbase cluster
 
----
+The cluster includes:
 
-## Run the container
+* HDFS (distributed storage layer)
+* YARN (resource management and scheduling)
+* HBase 2.5.8 (distributed NoSQL database)
 
-Once the cluster image is built, start a container and mount the current project directory into `/workspace`:
+### Monitoring & Observability
+
+The monitoring stack is included out of the box and provides visibility into HBase services through:
+
+* JMX Exporter (metrics exposure)
+* Prometheus (metrics collection and storage)
+* Grafana (dashboarding and visualization)
+
+The provided [`docker-compose.yml`](./docker-compose.yml) uses the pre-built Docker image available in my Docker Hub `massmach/hadoop-hbase-cluster:latest`
+
+**Start the entire stack with**:
 
 ```bash
-docker run -d \
-  -p 9870:9870 \
-  -p 8088:8088 \
-  -p 16010:16010 \
-  -v "$PWD:/workspace" \
-  massmach/hadoop-hbase-cluster:latest
+docker compose up -d
+```
 
+Once the deployment is complete, verify that all containers are running:
+
+```bash
+docker ps
+```
+
+Expected containers (services):
+
+```text
+hadoop-hbase-cluster 
+prometheus
+grafana
 ```
 
 ## Notes
 
-- This project code is available inside the container at `/workspace`.
+* The current project directory is mounted inside the hadoop-hbase-cluster` container at **/workspace**
 
-- You can list running containers with:
-```bash
-docker ps
-````
+- This allows you to access, edit, and execute the project code directly from within the container without rebuilding the image.
+- Hadoop, HBase, and monitoring services are automatically started when the container launches.
+- Prometheus and Grafana are available immediately after deployment for metrics collection and visualization (see **Monitoring section** in : https://github.com/machterMassi06/Hbase-pseudo-distributed/README.md)
 
-* You can enter at the running container with:
-
-```bash
-docker exec -it <container_id> bash
-```
-
----
 
 # 2 - Create Tables
+
+You can enter **hadoop-hbase-cluster** container with:
+
+```bash
+docker exec hadoop-hbase-cluster -it  bash
+```
 
 To create the tables that we will use in HBase, inside the container:
 
