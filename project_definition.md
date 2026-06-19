@@ -254,6 +254,9 @@ user_id
 
 # Phase 6 – Performance Evaluation
 
+> ✅ Completed  
+> see: `./hbase_bench_and_perf_eval.md`
+
 ## New Requirement
 
 As the volume of data grows, execution times become longer.

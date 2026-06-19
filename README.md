@@ -439,6 +439,11 @@ This outputs confirms that the join was successfully performed: the original vis
 
 ---
 
+# 5. Benchmarking and Performance Evaluation
+
+See [this document](./hbase_bench_and_perf_eval.md), which summarizes the main approaches, tools, and metrics used to benchmark, evaluate, and monitor an Apache HBase cluster.
+
+---
 # TODO
 
 - Benchmark and analyze the performances.
