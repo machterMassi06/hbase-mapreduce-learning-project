@@ -28,14 +28,16 @@ cd hbase-mapreduce-learning-project
 
 To avoid manually installing and configuring Hadoop and HBase, we will use [**my Docker-based cluster project**](https://github.com/machterMassi06/Hbase-pseudo-distributed). The cluster runs in pseudo-distributed mode and provides a complete Hadoop-HBase environment :
 
-### Hadoop hbase cluster
+### Hadoop hbase cluster (image : massmach/hadoop-hbase-cluster:latest)
 
 The cluster includes:
 
 * HDFS (distributed storage layer)
 * YARN (resource management and scheduling)
 * HBase 2.5.8 (distributed NoSQL database)
-* Spark 3.4.3 (One master & one worker)
+
+### Spark 
+* Spark 3.4.3 (1 master & 1 worker in containers)
 
 ### Monitoring & Observability
 
@@ -45,7 +47,8 @@ The monitoring stack is included out of the box and provides visibility into HBa
 * Prometheus (metrics collection and storage)
 * Grafana (dashboarding and visualization)
 
-The provided [`docker-compose.yml`](./docker-compose.yml) uses the pre-built Docker image available in my Docker Hub `massmach/hadoop-hbase-cluster:latest`
+The provided [`docker-compose.yml`](./docker-compose.yml) starts all required services. For the Hadoop–HBase stack, it uses the pre-built Docker image available on my Docker Hub: `massmach/hadoop-hbase-cluster:latest`. For Spark 3.4.3, it builds the image from the [`Dockerfile.spark`](./Dockerfile.spark). For monitoring, Prometheus runs using the official `prom/prometheus:latest` image, and Grafana uses the official `grafana/grafana:latest` image.
+
 
 **Start the entire stack with**:
 
