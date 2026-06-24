@@ -1,0 +1,34 @@
+{
+  "table": {
+    "namespace": "default",
+    "name": "web_site.users"
+  },
+  "rowkey": "key",
+  "columns": {
+    "key": {
+      "cf": "rowkey",
+      "col": "key",
+      "type": "string"
+    },
+    "first_name": {
+      "cf": "info",
+      "col": "first_name",
+      "type": "string"
+    },
+    "last_name": {
+      "cf": "info",
+      "col": "last_name",
+      "type": "string"
+    },
+    "age": {
+      "cf": "info",
+      "col": "age",
+      "type": "string"
+    },
+    "gender": {
+      "cf": "info",
+      "col": "gender",
+      "type": "string"
+    }
+  }
+}

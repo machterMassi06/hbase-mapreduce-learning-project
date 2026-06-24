@@ -1,10 +1,10 @@
-# HBase & MapReduce project - Usage Cases
+# HBase - MapReduce - Spark project - Usage Cases
 
 The motivation behind this repo is to share my learning (2025/2026) in Big Data technologies, including:
 
 - HBase (distributed database)
 - HDFS (Hadoop Distributed File System)
-- MapReduce
+- MapReduce & Hbase integration with spark
 
 This repository is mainly experimental (R&D) and educational.
 
@@ -35,6 +35,7 @@ The cluster includes:
 * HDFS (distributed storage layer)
 * YARN (resource management and scheduling)
 * HBase 2.5.8 (distributed NoSQL database)
+* Spark 3.4.3 (One master & one worker)
 
 ### Monitoring & Observability
 
@@ -64,6 +65,8 @@ Expected containers (services):
 hadoop-hbase-cluster 
 prometheus
 grafana
+spark-master
+spark-worker
 ```
 
 ## Notes
@@ -455,7 +458,12 @@ This outputs confirms that the join was successfully performed: the original vis
 
 ---
 
-# 5. Benchmarking and Performance Evaluation
+# 5. Hbase - Spark connector 
+
+See [./spark/README.md](./spark/README.md) . 
+---
+
+# 6. Benchmarking and Performance Evaluation
 
 See [this document](./hbase_bench_and_perf_eval.md), which summarizes the main approaches, tools, and metrics used to benchmark, evaluate, and monitor an Apache HBase cluster.
 

@@ -1,0 +1,34 @@
+{
+  "table": {
+    "namespace": "default",
+    "name": "web_site.visits"
+  },
+  "rowkey": "key",
+  "columns": {
+    "key": {
+      "cf": "rowkey",
+      "col": "key",
+      "type": "string"
+    },
+    "country": {
+      "cf": "info",
+      "col": "country",
+      "type": "string"
+    },
+    "page": {
+      "cf": "info",
+      "col": "page",
+      "type": "string"
+    },
+    "timestamp": {
+      "cf": "info",
+      "col": "timestamp",
+      "type": "string"
+    },
+    "user_id": {
+      "cf": "info",
+      "col": "user_id",
+      "type": "string"
+    }
+  }
+}

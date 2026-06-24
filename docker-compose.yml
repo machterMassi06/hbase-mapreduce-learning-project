@@ -12,6 +12,40 @@ services:
       - "9405:9405"   # HBase Master JMX Exporter
     volumes:
       - .:/workspace # mount the project code into /workspace
+  
+  spark-master:
+    build:
+      context: . 
+      dockerfile: Dockerfile.spark
+    container_name: spark-master
+    command: >
+      /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
+      --host spark-master
+      --port 7077
+      --webui-port 8080
+    ports:
+      - "7077:7077"
+      - "8080:8080" # Spark master UI 
+    environment:
+      HOME: /tmp
+    volumes:
+      - ./spark/:/workspace
+  spark-worker:
+    build:
+      context: . 
+      dockerfile: Dockerfile.spark
+    container_name: spark-worker
+    command: >
+      /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker
+      spark://spark-master:7077
+    ports:
+      - "8081:8081"
+    environment:
+      HOME: /tmp
+    volumes:
+      - ./spark/:/workspace
+    depends_on:
+      - spark-master
 
   prometheus:
     image: prom/prometheus:latest
