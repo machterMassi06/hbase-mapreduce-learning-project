@@ -41,3 +41,61 @@ For the `web_site.visits` table:
 ```bash
 /workspace/run-spark.sh read_Hbase_table.py catalogs/visits.json
 ```
+
+---
+
+## 2. Spark–HBase Bulk Loading
+
+> > See TODO section to fix the current issue 
+
+### Usage
+
+1. Truncate the HBase table (to remove existing data)
+2. Run the Spark job:
+
+```bash
+/workspace/run-spark.sh bulk_load.py <path-to-catalog> <path-to-data-source> <tmp-path-to-store-hfiles>
+```
+
+### Example (for `web_site.visits` table)
+
+```bash
+hbase shell
+hbase > truncate 'web_site.visits'
+```
+
+Then run:
+
+```bash
+/workspace/run-spark.sh bulk_load.py catalogs/visits.json hdfs://hadoop-hbase-cluster:9000/data/visits.csv /tmp/hfiles_visits
+```
+
+---
+
+## TODO
+
+**bulk load** : Fix the following issue:
+
+```
+Traceback (most recent call last):
+  File "/workspace/bulk_load.py", line 194, in <module>
+    thin_bulk_load(sys.argv[1], sys.argv[2], sys.argv[3])
+  File "/workspace/bulk_load.py", line 138, in thin_bulk_load
+    hbase_context.hbaseBulkLoadThinRows(
+  File "/opt/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1314, in __call__
+  File "/opt/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1283, in _build_args
+  File "/opt/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1283, in <listcomp>
+  File "/opt/spark/python/lib/py4j/py4j/protocol.py", line 298, in get_command_part
+AttributeError: 'function' object has no attribute '_get_object_id'
+```
+
+**Root cause**
+
+The Python lambda function:
+
+```python
+lambda t: (t[0], t[1])
+```
+
+cannot be converted by Py4J into a Scala/Java function, causing a serialization failure between Python and the JVM.
+
