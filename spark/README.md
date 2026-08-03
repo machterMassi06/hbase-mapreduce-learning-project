@@ -31,7 +31,7 @@ Python script: `spark/read_Hbase_table.py`
 You must provide a **catalog file**, which defines the schema (i.e., the representation of the HBase table you want to read). Note that the table must already exist in HBase.
 
 ```bash
-/workspace/run-spark.sh read_Hbase_table.py <path_to_catalog>
+/workspace/run-spark.sh /workspace/read_Hbase_table.py <path_to_catalog>
 ```
 
 ### Example
@@ -39,7 +39,7 @@ You must provide a **catalog file**, which defines the schema (i.e., the represe
 For the `web_site.visits` table:
 
 ```bash
-/workspace/run-spark.sh read_Hbase_table.py catalogs/visits.json
+/workspace/run-spark.sh /workspace/read_Hbase_table.py /workspace/catalogs/visits.json
 ```
 
 ---
@@ -54,7 +54,7 @@ For the `web_site.visits` table:
 2. Run the Spark job:
 
 ```bash
-/workspace/run-spark.sh bulk_load.py <path-to-catalog> <path-to-data-source> <tmp-path-to-store-hfiles>
+/workspace/run-spark.sh /workspace/bulk_load.py <path-to-catalog> <path-to-data-source> <tmp-path-to-store-hfiles>
 ```
 
 ### Example (for `web_site.visits` table)
@@ -67,7 +67,7 @@ hbase > truncate 'web_site.visits'
 Then run:
 
 ```bash
-/workspace/run-spark.sh bulk_load.py catalogs/visits.json hdfs://hadoop-hbase-cluster:9000/data/visits.csv /tmp/hfiles_visits
+/workspace/run-spark.sh /workspace/bulk_load.py /workspace/catalogs/visits.json hdfs://hadoop-hbase-cluster:9000/data/visits.csv /tmp/hfiles_visits
 ```
 
 ---
@@ -97,5 +97,5 @@ The Python lambda function:
 lambda t: (t[0], t[1])
 ```
 
-cannot be converted by Py4J into a Scala/Java function, causing a serialization failure between Python and the JVM.
+cannot be converted by Py4J into a Scala/Java function, causing a serialization failure between Python and the JVM (use UDF Python).
 
