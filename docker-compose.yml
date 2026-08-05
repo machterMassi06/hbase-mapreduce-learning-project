@@ -30,6 +30,7 @@ services:
       HOME: /tmp
     volumes:
       - ./spark/:/workspace
+      - ./mapreduce/:/workspace/mapreduce
   spark-worker:
     build:
       context: . 
