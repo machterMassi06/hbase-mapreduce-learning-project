@@ -86,6 +86,24 @@ Then run the Spark job:
   hdfs://hadoop-hbase-cluster:9000/data/visits.csv \
   hdfs://hadoop-hbase-cluster:9000/hfiles_visits
 ```
+---
+
+## Classic HBase-Spark Connector Load
+
+To run the classic HBase-Spark connector write:
+
+```bash
+/workspace/run-spark.sh /workspace/classic_load.py <path-to-catalog> <path-to-data-source>
+```
+
+Example (for `web_site.visits` table):
+
+```bash
+/workspace/run-spark.sh /workspace/classic_load.py /workspace/catalogs/visits.json hdfs://hadoop-hbase-cluster:9000/data/visits.csv
+```
+
+The job writes the DataFrame directly to HBase using the HBase-Spark Connector (without generating HFiles).
+
 
 ---
 
