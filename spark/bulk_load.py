@@ -62,6 +62,8 @@ def thin_bulk_load(catalog_path, input_csv, output_path):
             )
         )
 
+        n_partitions = 7 
+
 
     elif table_name == "web_site.users":
 
@@ -70,7 +72,7 @@ def thin_bulk_load(catalog_path, input_csv, output_path):
             F.col("user_id").cast("string")
         )
 
-
+        n_partitions = 1 
     else:
 
         raise Exception(
@@ -78,8 +80,12 @@ def thin_bulk_load(catalog_path, input_csv, output_path):
         )
 
 
-    # ordering by rowkey is required for HFile generation
-    df = df.orderBy("key")
+    # HFiles must be sorted by rowkey
+    # ThinBulkLoad handles the required sorting internally
+    # 1 - Avoid global orderBy() as it triggers an expensive shuffle
+    # df = df.orderBy("key")
+    # OR  2- Using repartition(n, "key") to control parallelism and HFile generation
+    # df = df.repartition(n_partitions, "key")
 
 
     # Convert catalog Python dict to Java Map
