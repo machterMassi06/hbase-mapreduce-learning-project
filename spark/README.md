@@ -46,56 +46,55 @@ For the `web_site.visits` table:
 
 ## 2. Spark–HBase Bulk Loading
 
-> > See TODO section to fix the current issue 
+The bulk loading process is implemented using a custom Java wrapper around HBase's `ThinBulkLoad` API.
+
+The wrapper is responsible for generating HFiles from Spark DataFrames and loading them into HBase using the HBase bulk load mechanism.
+
+The Java implementation can be found in:
+
+```bash 
+./mapreduce/src/main/java/mapreduce/hbase/ThinBulkLoad*.java
+```
 
 ### Usage
 
-1. Truncate the HBase table (to remove existing data)
-2. Run the Spark job:
+1. Truncate the target HBase table to remove existing data (if required).
+2. Execute the Spark bulk load job:
 
 ```bash
-/workspace/run-spark.sh /workspace/bulk_load.py <path-to-catalog> <path-to-data-source> <tmp-path-to-store-hfiles>
+/workspace/run-spark.sh /workspace/bulk_load.py <path-to-catalog> <path-to-data-source> <hdfs-path-to-store-hfiles>
 ```
 
-### Example (for `web_site.visits` table)
+### Example: Bulk loading the `web_site.visits` table
+
+First, truncate the existing HBase table:
 
 ```bash
 hbase shell
+```
+
+```bash
 hbase > truncate 'web_site.visits'
 ```
 
-Then run:
+Then run the Spark job:
 
 ```bash
-/workspace/run-spark.sh /workspace/bulk_load.py /workspace/catalogs/visits.json hdfs://hadoop-hbase-cluster:9000/data/visits.csv /tmp/hfiles_visits
+/workspace/run-spark.sh \
+  /workspace/bulk_load.py \
+  /workspace/catalogs/visits.json \
+  hdfs://hadoop-hbase-cluster:9000/data/visits.csv \
+  hdfs://hadoop-hbase-cluster:9000/hfiles_visits
 ```
 
 ---
 
-## TODO
+## TO DO
 
-**bulk load** : Fix the following issue:
+- In `bulk_load.py`, evaluate the best strategy for rowkey ordering before HFile generation:
+  - No explicit sorting
+  - Global sorting using `orderBy("key")`
+  - Controlling parallelism using `repartition(n, "key")`
 
-```
-Traceback (most recent call last):
-  File "/workspace/bulk_load.py", line 194, in <module>
-    thin_bulk_load(sys.argv[1], sys.argv[2], sys.argv[3])
-  File "/workspace/bulk_load.py", line 138, in thin_bulk_load
-    hbase_context.hbaseBulkLoadThinRows(
-  File "/opt/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1314, in __call__
-  File "/opt/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1283, in _build_args
-  File "/opt/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1283, in <listcomp>
-  File "/opt/spark/python/lib/py4j/py4j/protocol.py", line 298, in get_command_part
-AttributeError: 'function' object has no attribute '_get_object_id'
-```
-
-**Root cause**
-
-The Python lambda function:
-
-```python
-lambda t: (t[0], t[1])
-```
-
-cannot be converted by Py4J into a Scala/Java function, causing a serialization failure between Python and the JVM (use UDF Python).
+Compare the impact of each approach on: HFile generation correctness, Number and size of generated HFiles, Execution time , Spark shuffle overhead, Scalability with larger datasets
 
