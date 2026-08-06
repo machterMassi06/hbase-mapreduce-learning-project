@@ -1,5 +1,6 @@
 import json
 import sys
+import time
 
 from spark_utils.session import create_spark_session
 from pyspark.sql import functions as F
@@ -127,7 +128,7 @@ def thin_bulk_load(catalog_path, input_csv, output_path):
     wrapper = (
         jvm.mapreduce.hbase.ThinBulkLoadWrapper
     )
-
+    start = time.time()
     # Execute Thin Bulk Load (generate HFiles in "thin")
     wrapper.bulkLoadThinRows(
         hbase_context,
@@ -171,6 +172,13 @@ def thin_bulk_load(catalog_path, input_csv, output_path):
         table,
         region_locator
     )
+    
+    end = time.time()
+
+    print(
+        f"HBase bulk load duration: {end - start:.2f} seconds"
+    )
+
 
     spark.stop()
 
